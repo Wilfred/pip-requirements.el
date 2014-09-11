@@ -54,9 +54,16 @@
    (list pip-requirements-version-regex 1 'font-lock-builtin-face)
    (list pip-requirements-version-regex 2 'font-lock-constant-face)))
 
+(defconst pip-requirements-syntax-table
+  (let ((table (make-syntax-table)))
+    (modify-syntax-entry ?# "<" table)
+    (modify-syntax-entry ?\n ">" table)
+    table))
+
 ;;;###autoload
 (define-derived-mode pip-requirements-mode fundamental-mode "pip-require"
   "Major mode for editing pip requirements files."
+  :syntax-table pip-requirements-syntax-table
   (set (make-local-variable 'font-lock-defaults) '(pip-requirements-operators)))
 
 (provide 'pip-requirements)
