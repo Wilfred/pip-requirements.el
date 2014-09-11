@@ -28,7 +28,7 @@
 
 ;;; Commentary:
 
-;; This mode adds basic higlighting for pip requirements files to Emacs.
+;; This mode adds basic highlighting for pip requirements files to Emacs.
 
 ;; TODO: Steal shamelessly all the fantasic ideas in
 ;; https://github.com/wuub/requirementstxt
