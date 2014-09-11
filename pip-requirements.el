@@ -4,7 +4,7 @@
 ;;
 ;; Author: Wilfred Hughes <me@wilfred.me.uk>
 ;; Created: 11 September 2014
-;; Version: 0.1
+;; Version: 0.2
 
 ;;; License:
 
@@ -38,20 +38,21 @@
 ;;;###autoload
 (add-to-list 'auto-mode-alist '("\\.pip\\'" . pip-requirements-mode))
 
-(defconst pip-requirements-regex
+(defconst pip-requirements-name-regex
   (rx
-   (group (1+ (or alphanumeric "-")))
-   (optional
-    "[" (1+ (or alphanumeric "-")) "]")
-   (optional
-    (group (or "==" ">" ">=" "<" "<="))
-    (group (1+ (or digit "."))))))
+   line-start
+   (group (1+ (or alphanumeric "-")))))
+
+(defconst pip-requirements-version-regex
+  (rx
+   (group (or "==" ">" ">=" "<" "<="))
+   (group (1+ (or digit ".")))))
 
 (defconst pip-requirements-operators
   (list
-   (list pip-requirements-regex 1 'font-lock-variable-name-face)
-   (list pip-requirements-regex 2 'font-lock-builtin-face)
-   (list pip-requirements-regex 3 'font-lock-constant-face)))
+   (list pip-requirements-name-regex 1 'font-lock-variable-name-face)
+   (list pip-requirements-version-regex 1 'font-lock-builtin-face)
+   (list pip-requirements-version-regex 2 'font-lock-constant-face)))
 
 ;;;###autoload
 (define-derived-mode pip-requirements-mode fundamental-mode "pip-require"
