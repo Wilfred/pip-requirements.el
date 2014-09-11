@@ -1,4 +1,4 @@
-;;; pip-requirements-mode.el --- A major mode for editing pip requirements files.
+;;; pip-requirements.el --- A major mode for editing pip requirements files.
 
 ;; Copyright (C) 2014 Wilfred Hughes <me@wilfred.me.uk>
 ;;
