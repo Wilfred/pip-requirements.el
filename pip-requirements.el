@@ -47,7 +47,7 @@
 
 (defconst pip-requirements-version-regex
   (rx
-   (group (or "==" ">" ">=" "<" "<="))
+   (group (or "==" ">" ">=" "<" "<=" "!="))
    (group (1+ (or digit "b" ".")))))
 
 (defconst pip-requirements-operators
