@@ -1,0 +1,5 @@
+# I'm a comment!
+Django==1.2.3
+foo[bar]==1.2
+baz>1,<2
+python-dateutil>=1.5,<=2.1,!=2.0
