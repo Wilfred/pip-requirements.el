@@ -36,9 +36,11 @@
 ;;; Code:
 
 ;;;###autoload
-(add-to-list 'auto-mode-alist '("\\.pip\\'" . pip-requirements-mode))
+(add-to-list 'auto-mode-alist
+             `(,(rx ".pip" string-end) . pip-requirements-mode))
 ;;;###autoload
-(add-to-list 'auto-mode-alist '("requirements\\.txt\\'" . pip-requirements-mode))
+(add-to-list 'auto-mode-alist
+             `(,(rx "requirements" (zero-or-more anything) ".txt" string-end) . pip-requirements-mode))
 
 (defconst pip-requirements-name-regex
   (rx
