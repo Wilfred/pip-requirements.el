@@ -40,7 +40,6 @@
 
 ;;; Code:
 
-(require 'auto-complete)
 (require 'dash)
 
 ;;;###autoload
@@ -111,6 +110,23 @@ Assumes Emacs is compiled with libxml."
          (end (or (cdr bounds) (point))))
     (list start end pip-packages)))
 
+;; Declare variables from AC, to avoid a hard dependency on Auto Complete.
+(defvar ac-modes)
+(defvar ac-sources)
+
+;;;###autoload
+(defun pip-requirements-auto-complete-setup ()
+  "Setup Auto-Complete for Pip Requirements.
+
+See URL `https://github.com/auto-complete/auto-complete' for
+information about Auto Complete."
+  (add-to-list 'ac-modes 'pip-requirements-mode)
+  (add-to-list 'ac-sources '((candidates . pip-packages)))
+  (when (and (fboundp 'auto-complete-mode)
+             (not (bound-and-true-p auto-complete-mode)))
+    ;; Enable Auto Complete
+    (auto-complete-mode)))
+
 ;;;###autoload
 (define-derived-mode pip-requirements-mode fundamental-mode "pip-require"
   "Major mode for editing pip requirements files."
@@ -121,10 +137,7 @@ Assumes Emacs is compiled with libxml."
             #'pip-requirements-complete-at-point nil 'local)
   (unless pip-packages
     ;; Fetch the list of packages for completion
-    (pip-requirements-fetch-packages))
-  (when pip-enable-auto-complete
-    (add-to-list 'ac-modes 'pip-requirements-mode)
-    (add-to-list 'ac-sources '((candidates . pip-packages)))))
+    (pip-requirements-fetch-packages)))
 
 (provide 'pip-requirements)
 ;;; pip-requirements.el ends here
