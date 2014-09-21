@@ -5,6 +5,7 @@
 ;; Author: Wilfred Hughes <me@wilfred.me.uk>
 ;; Created: 11 September 2014
 ;; Version: 0.4
+;; Package-Requires: ((dash "2.8.0"))
 
 ;;; License:
 
@@ -32,11 +33,15 @@
 
 ;; * Syntax highlighting
 ;; * Togglable comments
+;; * Auto completion of package names from PyPI
 
 ;; TODO: Steal shamelessly all the fantasic ideas in
 ;; https://github.com/wuub/requirementstxt
 
 ;;; Code:
+
+(require 'auto-complete)
+(require 'dash)
 
 ;;;###autoload
 (add-to-list 'auto-mode-alist
@@ -67,12 +72,47 @@
     (modify-syntax-entry ?\n ">" table)
     table))
 
+(defvar pip-http-buffer nil)
+(defvar pip-packages nil)
+
+(defvar pip-enable-auto-complete t
+  "If true, fetches package list from PyPI and adds the packages to `ac-sources' for auto completion.")
+
+(defun pip-requirements-callback (&rest _)
+  (with-current-buffer pip-http-buffer
+    ;; Move over the HTTP header.
+    (goto-char (point-min))
+    (re-search-forward "^$" nil 'move)
+
+    (setq pip-packages
+          (->> (libxml-parse-html-region (point) (point-max))
+            ;; Get the body tag.
+            -last-item
+            ;; Immediate children of the body.
+            cdddr
+            ;; Anchor tags.
+            (--filter (eq (car it) 'a))
+            ;; Inner text of anchor tags.
+            (-map 'third))))
+  (kill-buffer pip-http-buffer))
+
+(defun pip-requirements-fetch-packages ()
+  "Get a list of all packages available on PyPI and store them in `pip-packages'.
+Assumes Emacs is compiled with libxml."
+  (setq pip-http-buffer
+        (url-retrieve "https://pypi.python.org/simple/" 'pip-requirements-callback nil t)))
+
 ;;;###autoload
 (define-derived-mode pip-requirements-mode fundamental-mode "pip-require"
   "Major mode for editing pip requirements files."
   :syntax-table pip-requirements-syntax-table
   (set (make-local-variable 'font-lock-defaults) '(pip-requirements-operators))
-  (set (make-local-variable 'comment-start) "#"))
+  (set (make-local-variable 'comment-start) "#")
+  (when pip-enable-auto-complete
+    (add-to-list 'ac-modes 'pip-requirements-mode)
+    (add-to-list 'ac-sources '((candidates . pip-packages)))
+    (unless pip-packages
+      (pip-requirements-fetch-packages))))
 
 (provide 'pip-requirements)
 ;;; pip-requirements.el ends here
