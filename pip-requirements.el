@@ -73,7 +73,8 @@
     table))
 
 (defvar pip-http-buffer nil)
-(defvar pip-packages nil)
+(defvar pip-packages nil
+  "List of PyPI packages for completion.")
 
 (defvar pip-enable-auto-complete t
   "If true, fetches package list from PyPI and adds the packages to `ac-sources' for auto completion.")
@@ -100,7 +101,15 @@
   "Get a list of all packages available on PyPI and store them in `pip-packages'.
 Assumes Emacs is compiled with libxml."
   (setq pip-http-buffer
-        (url-retrieve "https://pypi.python.org/simple/" 'pip-requirements-callback nil t)))
+        (url-retrieve "https://pypi.python.org/simple/"
+                      #'pip-requirements-callback nil t)))
+
+(defun pip-requirements-complete-at-point ()
+  "Complete at point in Pip Requirements Mode."
+  (let* ((bounds (bounds-of-thing-at-point 'symbol))
+         (start (or (car bounds) (point)))
+         (end (or (cdr bounds) (point))))
+    (list start end pip-packages)))
 
 ;;;###autoload
 (define-derived-mode pip-requirements-mode fundamental-mode "pip-require"
@@ -108,11 +117,14 @@ Assumes Emacs is compiled with libxml."
   :syntax-table pip-requirements-syntax-table
   (set (make-local-variable 'font-lock-defaults) '(pip-requirements-operators))
   (set (make-local-variable 'comment-start) "#")
+  (add-hook 'completion-at-point-functions
+            #'pip-requirements-complete-at-point nil 'local)
+  (unless pip-packages
+    ;; Fetch the list of packages for completion
+    (pip-requirements-fetch-packages))
   (when pip-enable-auto-complete
     (add-to-list 'ac-modes 'pip-requirements-mode)
-    (add-to-list 'ac-sources '((candidates . pip-packages)))
-    (unless pip-packages
-      (pip-requirements-fetch-packages))))
+    (add-to-list 'ac-sources '((candidates . pip-packages)))))
 
 (provide 'pip-requirements)
 ;;; pip-requirements.el ends here
