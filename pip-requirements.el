@@ -42,6 +42,18 @@
 
 (require 'dash)
 
+(defgroup pip-requirements nil
+  "Requirements files for pip"
+  :prefix "pip-requirements-"
+  :group 'languages
+  :link '(url-link :tag "Github" "https://github.com/Wilfred/pip-requirements.el"))
+
+(defcustom pip-requirements-mode-hook nil
+  "Hook to run after `pip-requirements-mode'."
+  :group 'pip-requirements
+  :type 'hook
+  :risky t)
+
 ;;;###autoload
 (add-to-list 'auto-mode-alist
              `(,(rx ".pip" string-end) . pip-requirements-mode))
@@ -126,6 +138,9 @@ information about Auto Complete."
              (not (bound-and-true-p auto-complete-mode)))
     ;; Enable Auto Complete
     (auto-complete-mode)))
+
+(custom-add-frequent-value 'pip-requirements-mode-hook
+                           'pip-requirements-auto-complete-setup)
 
 ;;;###autoload
 (define-derived-mode pip-requirements-mode fundamental-mode "pip-require"
