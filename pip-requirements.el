@@ -68,7 +68,8 @@
 (define-derived-mode pip-requirements-mode fundamental-mode "pip-require"
   "Major mode for editing pip requirements files."
   :syntax-table pip-requirements-syntax-table
-  (set (make-local-variable 'font-lock-defaults) '(pip-requirements-operators)))
+  (set (make-local-variable 'font-lock-defaults) '(pip-requirements-operators))
+  (set (make-local-variable 'comment-start) "#"))
 
 (provide 'pip-requirements)
 ;;; pip-requirements.el ends here
