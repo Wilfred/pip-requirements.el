@@ -6,7 +6,7 @@ This is a major mode for editing pip requirements files, with the following feat
 * Togglable comments
 * Auto completion of package names from PyPI
 
-![pip-requirements](pip_requirements.png)
+![pip-requirements](pip_requirements_screenshot.png)
 
 ## Changelog
 
