@@ -101,7 +101,7 @@
             ;; Get the body tag.
             -last-item
             ;; Immediate children of the body.
-            cdddr
+            cdr cdr cdr
             ;; Anchor tags.
             (--filter (eq (car it) 'a))
             ;; Inner text of anchor tags.
