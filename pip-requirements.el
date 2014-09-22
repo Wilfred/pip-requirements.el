@@ -87,9 +87,6 @@
 (defvar pip-packages nil
   "List of PyPI packages for completion.")
 
-(defvar pip-enable-auto-complete t
-  "If true, fetches package list from PyPI and adds the packages to `ac-sources' for auto completion.")
-
 (defun pip-requirements-callback (&rest _)
   (with-current-buffer pip-http-buffer
     ;; Move over the HTTP header.
