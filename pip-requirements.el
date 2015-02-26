@@ -140,7 +140,7 @@ information about Auto Complete."
                            'pip-requirements-auto-complete-setup)
 
 ;;;###autoload
-(define-derived-mode pip-requirements-mode fundamental-mode "pip-require"
+(define-derived-mode pip-requirements-mode prog-mode "pip-require"
   "Major mode for editing pip requirements files."
   :syntax-table pip-requirements-syntax-table
   (set (make-local-variable 'font-lock-defaults) '(pip-requirements-operators))
