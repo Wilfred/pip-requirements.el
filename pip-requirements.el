@@ -41,6 +41,7 @@
 ;;; Code:
 
 (require 'dash)
+(require 'cl-lib)
 
 (defgroup pip-requirements nil
   "Requirements files for pip"
@@ -95,14 +96,14 @@
 
     (setq pip-packages
           (->> (libxml-parse-html-region (point) (point-max))
-            ;; Get the body tag.
-            -last-item
-            ;; Immediate children of the body.
-            cdr cdr cdr
-            ;; Anchor tags.
-            (--filter (eq (car it) 'a))
-            ;; Inner text of anchor tags.
-            (-map 'third))))
+               ;; Get the body tag.
+               -last-item
+               ;; Immediate children of the body.
+               cdr cdr cdr
+               ;; Anchor tags.
+               (--filter (eq (car it) 'a))
+               ;; Inner text of anchor tags.
+               (-map #'cl-third))))
   (kill-buffer pip-http-buffer))
 
 (defun pip-requirements-fetch-packages ()
