@@ -65,7 +65,7 @@
 (defconst pip-requirements-name-regex
   (rx
    line-start
-   (group (1+ (or alphanumeric "-" ".")))))
+   (group (1+ (or alphanumeric "-" "_" ".")))))
 
 (defconst pip-requirements-version-regex
   (rx
