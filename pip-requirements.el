@@ -70,7 +70,7 @@
 (defconst pip-requirements-version-regex
   (rx
    (group (or "==" ">" ">=" "<" "<=" "!="))
-   (group (1+ (or digit "b" ".")))))
+   (group (1+ (or digit "b" "." "post")))))
 
 (defconst pip-requirements-operators
   (list
