@@ -64,7 +64,7 @@
 
 ;;;###autoload
 (add-to-list 'auto-mode-alist
-`(,(rx "requirements" (zero-or-more anything) ".in" string-end) . pip-requirements-mode))
+`(,(rx "requirements.in") . pip-requirements-mode))
 
 (defconst pip-requirements-name-regex
   (rx
