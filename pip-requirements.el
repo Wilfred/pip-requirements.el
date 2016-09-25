@@ -62,6 +62,10 @@
 (add-to-list 'auto-mode-alist
              `(,(rx "requirements" (zero-or-more anything) ".txt" string-end) . pip-requirements-mode))
 
+;;;###autoload
+(add-to-list 'auto-mode-alist
+`(,(rx "requirements" (zero-or-more anything) ".in" string-end) . pip-requirements-mode))
+
 (defconst pip-requirements-name-regex
   (rx
    line-start
