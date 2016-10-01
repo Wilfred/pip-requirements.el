@@ -1,5 +1,8 @@
 # pip-requirements.el
 
+[![MELPA](http://melpa.org/packages/pip-requirements-badge.svg)](http://melpa.org/#/pip-requirements)
+[![MELPA Stable](http://stable.melpa.org/packages/pip-requirements-badge.svg)](http://stable.melpa.org/#/pip-requirements)
+
 This is a major mode for editing pip requirements files, with the following features:
 
 * Syntax highlighting
