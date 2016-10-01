@@ -28,6 +28,19 @@ To use [Auto Complete][] instead, add the following to your `init.el`:
 
 ## Changelog
 
+### 0.5
+
+Added support for completion-at-point-functions. Autocomplete is now
+optional, and pip-requirements also works with company (via
+`company-capf`).
+
+`.` and `_` are now supported in package names, and `.postN` is now
+supported in version numbers.
+
+`pip-requirements-mode` now inherits from `prog-mode`.
+
+`requirements.in` files are now recognised as pip requirements files.
+
 ### 0.4
 
 Auto-completion of package names! See screenshot above. Requires
