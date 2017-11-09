@@ -86,6 +86,9 @@
   (let ((table (make-syntax-table)))
     (modify-syntax-entry ?# "<" table)
     (modify-syntax-entry ?\n ">" table)
+    (modify-syntax-entry ?> "." table)
+    (modify-syntax-entry ?< "." table)
+    (modify-syntax-entry ?= "." table)
     table))
 
 (defvar pip-http-buffer nil)
