@@ -72,15 +72,22 @@
    (group (1+ (or alphanumeric "-" "_" ".")))))
 
 (defconst pip-requirements-version-regex
+  ;; https://www.python.org/dev/peps/pep-0440/#version-specifiers
   (rx
-   (group (or "==" ">" ">=" "<" "<=" "!="))
-   (group (1+ (or digit "b" "." "post")))))
+   (group (or "==" ">" ">=" "<" "<=" "!=" "~="))
+   (group (1+ (or digit "b" "." "post" "*")))))
+
+(defconst pip-requirements-arbitrary-version-regex
+  ;; https://www.python.org/dev/peps/pep-0440/#arbitrary-equality
+  (rx (group "===") (group (1+ not-newline))))
 
 (defconst pip-requirements-operators
   (list
    (list pip-requirements-name-regex 1 'font-lock-variable-name-face)
    (list pip-requirements-version-regex 1 'font-lock-builtin-face)
-   (list pip-requirements-version-regex 2 'font-lock-constant-face)))
+   (list pip-requirements-arbitrary-version-regex 1 'font-lock-builtin-face)
+   (list pip-requirements-version-regex 2 'font-lock-constant-face)
+   (list pip-requirements-arbitrary-version-regex 2 'font-lock-constant-face)))
 
 (defconst pip-requirements-syntax-table
   (let ((table (make-syntax-table)))
