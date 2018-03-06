@@ -4,3 +4,8 @@ foo[bar]==1.2
 baz>1,<2
 python-dateutil>=1.5,<=2.1,!=2.0
 backports.ssl-match-hostname==3.4.0.2
+
+# https://www.python.org/dev/peps/pep-0440/#version-specifiers
+quux~=1.2
+xyx==1.2.*
+abc===foobar
