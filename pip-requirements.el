@@ -109,23 +109,20 @@
     (goto-char (point-min))
     (re-search-forward "^$" nil 'move)
 
-    (setq pip-packages
-          (->> (libxml-parse-html-region (point) (point-max))
-               ;; Get the body tag.
-               -last-item
-               ;; Immediate children of the body.
-               cdr cdr cdr
-               ;; Anchor tags.
-               (--filter (eq (car it) 'a))
-               ;; Inner text of anchor tags.
-               (-map #'cl-third))))
+    (let* ((dom (libxml-parse-html-region (point) (point-max)))
+           (body-tag (-last-item dom))
+           (body-children (cdddr body-tag))
+           (a-tags (--filter (eq (car-safe it) 'a) body-children)))
+      (setq pip-packages
+            ;; Inner text of anchor tags.
+            (-map #'cl-third a-tags))))
   (kill-buffer pip-http-buffer))
 
 (defun pip-requirements-fetch-packages ()
   "Get a list of all packages available on PyPI and store them in `pip-packages'.
 Assumes Emacs is compiled with libxml."
   (setq pip-http-buffer
-        (url-retrieve "https://pypi.python.org/simple/"
+        (url-retrieve "https://pypi.org/simple/"
                       #'pip-requirements-callback nil t)))
 
 (defun pip-requirements-complete-at-point ()

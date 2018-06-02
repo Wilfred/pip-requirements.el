@@ -28,6 +28,11 @@ To use [Auto Complete][] instead, add the following to your `init.el`:
 
 ## Changelog
 
+### 0.6
+
+Update pip-requirements completion to handle the move from
+pypi.python.org to pypi.org (minor HTML difference broke our parsing).
+
 ### 0.5
 
 Added support for completion-at-point-functions. Autocomplete is now
