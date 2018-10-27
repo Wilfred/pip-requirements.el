@@ -55,6 +55,14 @@
   :type 'hook
   :risky t)
 
+(defcustom pip-pypi-url "https://pypi.org/simple/"
+  "A PyPi URL to be used.
+This could be a environmental variable pointing to a pip.conf
+file that defines 'index-url', environmental variable containing
+an URL or a string with the URL itself."
+  :group 'pip-requirements
+  :type 'string)
+
 ;;;###autoload
 (add-to-list 'auto-mode-alist
              `(,(rx ".pip" string-end) . pip-requirements-mode))
@@ -118,12 +126,24 @@
             (-map #'cl-third a-tags))))
   (kill-buffer pip-http-buffer))
 
+
+(defun pip-requirements-pypi-url ()
+  "Decide what URL for PyPi is to be used."
+  (if (file-readable-p (substitute-env-vars pip-pypi-url))
+      (with-temp-buffer
+        (insert-file-contents (substitute-env-vars pip-pypi-url))
+        (when (string-match "index-url\s+=\s+\\(.*\\)" (buffer-string))
+          (message (match-string 1 (buffer-string)))))
+    (if (string-prefix-p  "$" pip-pypi-url) (getenv (substring pip-pypi-url 1)) pip-pypi-url)))
+
+
 (defun pip-requirements-fetch-packages ()
   "Get a list of all packages available on PyPI and store them in `pip-packages'.
 Assumes Emacs is compiled with libxml."
   (setq pip-http-buffer
-        (url-retrieve "https://pypi.org/simple/"
+        (url-retrieve (pip-requirements-pypi-url)
                       #'pip-requirements-callback nil t)))
+
 
 (defun pip-requirements-complete-at-point ()
   "Complete at point in Pip Requirements Mode."
