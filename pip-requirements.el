@@ -55,6 +55,12 @@
   :type 'hook
   :risky t)
 
+(defcustom pip-requirements-index-url
+  "https://pypi.org/simple/"
+  "The URL used to fetch the list of packages used for completion."
+  :group 'pip-requirements
+  :type 'string)
+
 ;;;###autoload
 (add-to-list 'auto-mode-alist
              `(,(rx ".pip" string-end) . pip-requirements-mode))
@@ -122,7 +128,7 @@
   "Get a list of all packages available on PyPI and store them in `pip-packages'.
 Assumes Emacs is compiled with libxml."
   (setq pip-http-buffer
-        (url-retrieve "https://pypi.org/simple/"
+        (url-retrieve pip-requirements-index-url
                       #'pip-requirements-callback nil t)))
 
 (defun pip-requirements-complete-at-point ()
